@@ -1,0 +1,245 @@
+{
+  "video": "30_2_5",
+  "px_per_mm": 8.618026380463784,
+  "fps": 58.49863196493956,
+  "diametro_mm": 88.9,
+  "diametro_mm_err": 0.5,
+  "n_detecciones": 236401,
+  "n_vinculos": 179612,
+  "n_vinculos_usados": 167447,
+  "centro_mm_respecto_roi": [
+    1.5,
+    -3.0
+  ],
+  "centro_px": [
+    667.7818938056753,
+    983.9953883797806
+  ],
+  "sentido_giro": "antihorario",
+  "sentido_giro_signo": -1.0,
+  "ajustes": {
+    "Rankine": {
+      "Omega_1_s": 10.654774499086036,
+      "R_mm": 9.749371557923453,
+      "vmax_mm_s": 103.8773554574775,
+      "r2": 0.9537035128756125,
+      "limite_inferior": false,
+      "limite_superior": false,
+      "chi2": 1813.5972735498276,
+      "chi2_red": 45.33993183874569,
+      "dof": 40,
+      "p_value": 0.0,
+      "n": 42,
+      "n_params": 2,
+      "modelo": "Rankine"
+    },
+    "Burgers": {
+      "K_mm3_s": 1027.7215936027806,
+      "R_mm": 7.7425593219500195,
+      "Omega_1_s": 17.143772645142892,
+      "r2": 0.955118055269561,
+      "limite_inferior": false,
+      "limite_superior": false,
+      "chi2": 1758.1846410083358,
+      "chi2_red": 43.954616025208395,
+      "dof": 40,
+      "p_value": 0.0,
+      "n": 42,
+      "n_params": 2,
+      "nu_mm2_s": 0.21403630430578346,
+      "m_1_s": -0.007140824444413119,
+      "modelo": "Burgers"
+    },
+    "radial": {
+      "m_1_s": -0.007140824444413119,
+      "intercepto_mm_s": -0.43376072437892443,
+      "pendiente_libre_1_s": 0.007129699521042151,
+      "r2": -0.18557875598448859,
+      "r2_libre": 0.05506179317720861,
+      "r2_cero": -0.8485095767057167,
+      "chi2": 11.4184768148898,
+      "chi2_red": 0.2784994345095073,
+      "dof": 41,
+      "p_value": 0.9999986896287905,
+      "n": 42,
+      "n_params": 1,
+      "chi2_libre": 9.100833623785642,
+      "chi2_red_libre": 0.22752084059464103,
+      "dof_libre": 40,
+      "p_value_libre": 0.9999999199594773,
+      "n_libre": 42,
+      "n_params_libre": 2,
+      "chi2_cero": 17.803257385620814,
+      "chi2_red_cero": 0.4238870806100194,
+      "dof_cero": 42,
+      "p_value_cero": 0.9996178866124324,
+      "n_cero": 42,
+      "n_params_cero": 0,
+      "modelo": "radial"
+    }
+  },
+  "bootstrap": {
+    "Rankine": {
+      "Omega_1_s": {
+        "media": 10.65685288499229,
+        "std": 0.0776962140289225
+      },
+      "R_mm": {
+        "media": 9.748492646942195,
+        "std": 0.035972209298637425
+      },
+      "vmax_mm_s": {
+        "media": 103.88558785257973,
+        "std": 0.406815390405561
+      }
+    },
+    "Burgers": {
+      "K_mm3_s": {
+        "media": 1027.7343820511053,
+        "std": 2.280123683197772
+      },
+      "R_mm": {
+        "media": 7.743317360774225,
+        "std": 0.034584069061601136
+      },
+      "Omega_1_s": {
+        "media": 17.14155789273291,
+        "std": 0.14716493429183186
+      },
+      "nu_mm2_s": {
+        "media": 0.20873217108944764,
+        "std": 0.08096752775651883
+      },
+      "m_1_s": {
+        "media": -0.006961537524577895,
+        "std": 0.0026986007312057012
+      }
+    },
+    "radial": {
+      "m_1_s": {
+        "media": -0.006961537524577895,
+        "std": 0.0026986007312057012
+      },
+      "intercepto_mm_s": {
+        "media": -0.4114082156406052,
+        "std": 0.2815741028521718
+      },
+      "pendiente_libre_1_s": {
+        "media": 0.0065735994090179,
+        "std": 0.009791965768813825
+      },
+      "chi2_red_libre": {
+        "media": 1.2336773932899174,
+        "std": 0.25196837901387914
+      },
+      "chi2_red_cero": {
+        "media": 1.4138671285591524,
+        "std": 0.28231815806773086
+      }
+    }
+  },
+  "errores_total": {
+    "Burgers": {
+      "K_mm3_s": 11.693980528736319,
+      "nu_mm2_s": 0.0819617581136231,
+      "m_1_s": 0.0027319542202845853,
+      "Omega_1_s": 0.15343620239922695,
+      "R_mm": 0.055810046084526214
+    },
+    "radial": {
+      "chi2_red_libre": 0.2539942086545332,
+      "pendiente_libre_1_s": 0.010189779413772991,
+      "intercepto_mm_s": 0.2960446168972877,
+      "m_1_s": 0.0027319542202845853,
+      "chi2_red_cero": 0.2927840707451195
+    },
+    "Rankine": {
+      "Omega_1_s": 0.12064061491754492,
+      "R_mm": 0.07728428326789351,
+      "vmax_mm_s": 0.8371037256154304
+    }
+  },
+  "errores_fuentes": {
+    "calibracion": {
+      "Rankine": {
+        "Omega_1_s": 1.8558892382891656e-05,
+        "R_mm": 0.05417371753189748,
+        "vmax_mm_s": 0.5770347530147859
+      },
+      "Burgers": {
+        "K_mm3_s": 11.419729178157297,
+        "R_mm": 0.043011334889466735,
+        "Omega_1_s": 1.690343144389317e-05,
+        "nu_mm2_s": 0.0023780951051164123,
+        "m_1_s": 0.0
+      },
+      "radial": {
+        "m_1_s": 0.0,
+        "intercepto_mm_s": 0.0024098561803822804,
+        "pendiente_libre_1_s": 4.336808689942018e-18,
+        "chi2_red_libre": 0.002528165397124485,
+        "chi2_red_cero": 0.004710147196562459
+      }
+    },
+    "centro": {
+      "Rankine": {
+        "Omega_1_s": 0.014329092034259201,
+        "R_mm": 0.009660573264702042,
+        "vmax_mm_s": 0.046069170946883585
+      },
+      "Burgers": {
+        "K_mm3_s": 0.6833321023914787,
+        "R_mm": 0.008056674943736955,
+        "Omega_1_s": 0.0431252290581924,
+        "nu_mm2_s": 0.012494634306645658,
+        "m_1_s": 0.00042515989708062597
+      },
+      "radial": {
+        "m_1_s": 0.00042515989708062597,
+        "intercepto_mm_s": 0.08683924751201764,
+        "pendiente_libre_1_s": 0.0026396732287981804,
+        "chi2_red_libre": 0.031634302462390025,
+        "chi2_red_cero": 0.06592115785628687
+      }
+    },
+    "binning": {
+      "Rankine": {
+        "Omega_1_s": 0.09117090034817288,
+        "R_mm": 0.040629327478787225,
+        "vmax_mm_s": 0.44738396358143717
+      },
+      "Burgers": {
+        "K_mm3_s": 0.8204019326944945,
+        "R_mm": 0.0019540908311657113,
+        "Omega_1_s": 0.005036333441085006,
+        "nu_mm2_s": 0.0004669253555237146,
+        "m_1_s": 1.915769248113158e-05
+      },
+      "radial": {
+        "m_1_s": 1.915769248113158e-05,
+        "intercepto_mm_s": 0.028488198988227215,
+        "pendiente_libre_1_s": 0.0009905231591923135,
+        "chi2_red_libre": 0.0042276819420936085,
+        "chi2_red_cero": 0.040634777809163414
+      }
+    }
+  },
+  "sigma_pos_px": 3.254949458167717,
+  "sigma_v_mm_s": 31.246194939948058,
+  "dispersion_centro_mm_s": 15.365110209972029,
+  "rmax_mm": 41.35792593025851,
+  "notas": [
+    "Rankine (ec. 1): Ω y R son separables (el codo marca R, la amplitud Ω). v_max = ΩR. Predice v_r = 0.",
+    "Burgers (ec. 2): para cada R se ajusta linealmente K = ΩR². R sale de la forma del decaimiento y luego Ω = K/R². La viscosidad sale de la pendiente radial m (v_r = m r) mediante la ec. 4: ν = −m R²/2.",
+    "Consistencia de la ec. 2: la solución EXACTA de Burgers con v_r = −(2ν/R²)r exige el exponente −2r²/R² (δ = R/√2), no −r²/R². La ec. 2 tal como está queda a un factor √2 en el largo de decaimiento; se ajusta igual el largo libre y se reporta como R del ajuste.",
+    "Si la pendiente radial m es compatible con 0 (dentro de su error), la ν deducida de v_r NO es confiable (los modelos la obtienen de datos casi nulos).",
+    "Los valores marcados como 'no acotado' tocan el borde del rango de búsqueda: el parámetro no queda determinado por los datos y no se reporta un error simétrico."
+  ],
+  "cadena_estimacion": [
+    "El perfil radial se obtiene de los vínculos (pares de detecciones en cuadros consecutivos), no de trayectorias largas. En cada bin se usa la mediana de v_θ y v_r.",
+    "Rankine: el codo del perfil fija R y la amplitud fija Ω; después v_max = ΩR. Es el único modelo donde Ω y R se separan directamente.",
+    "Burgers: la curva solo depende de K = ΩR² y de R. El solver recorre R, resuelve K por mínimos cuadrados lineales (es la amplitud que se ajusta directamente) y después calcula Ω = K/R². La pendiente radial m da ν = −mR²/2.",
+    "Si el decaimiento exponencial no se ve dentro del radio medido, R queda no acotado y solo se determina la combinación K. El informe lo marca explícitamente.",
+    "Errores: σ_total se obtiene en cuadratura a partir del bootstrap (estadístico + medición), la calibración (σ_D = 0.5 mm), la sensibilidad al centro y el cambio de ancho de bin. Las cantidades derivadas se recalculan en cada muestra y en cada reajuste."
+  ]
+}

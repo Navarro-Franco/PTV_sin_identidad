@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodología — campo de velocidades de un vórtice</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin: 0; background: #f5f6f8; color: #1c1e21; }
+  main { max-width: 980px; margin: 0 auto; padding: 28px; }
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  h2 { font-size: 1.1rem; margin: 34px 0 10px; padding-bottom: 5px;
+       border-bottom: 1px solid #dcdde0; }
+  h3 { font-size: 1rem; margin: 22px 0 8px; }
+  p, li { line-height: 1.55; }
+  .sub { color: #606770; font-size: .9rem; margin-bottom: 10px; }
+  table { border-collapse: collapse; width: 100%; background: #fff;
+          border-radius: 6px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid #eceef1;
+           font-size: .93rem; vertical-align: top; }
+  th { background: #f0f2f5; font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .nota { background: #fff; border-left: 4px solid #4c7bd9; padding: 12px 16px;
+          border-radius: 4px; color: #3b3f46; }
+  code { background: #f0f2f5; padding: 1px 4px; border-radius: 4px; }
+  .eq { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Metodología de ajuste y propagación de errores</h1>
+<div class="sub">Análisis del campo de velocidades de un vórtice con trazadores</div>
+
+<p>Este documento explica cómo se pasa de los vínculos entre detecciones a los
+parámetros de los modelos, qué se ajusta directamente y cómo se combinan los
+errores. Los informes por video muestran solo el resultado final
+(<code>valor ± σ_total</code>).</p>
+
+<h2>1. Del video al perfil radial</h2>
+
+<p>No se siguen trayectorias largas: se detectan las partículas en cada cuadro y
+se emparejan con el cuadro siguiente mediante vecino mutuo. Cada par
+(cuadro \(f\) → \(f+1\)) es un vínculo y aporta un punto de muestreo del campo.
+Para cada vínculo se calcula el punto medio \((x,y)\), su radio \(r\) y su
+velocidad \((v_x,v_y)\).</p>
+
+<div class="eq">
+\[
+r=\sqrt{(x-c_x)^2+(y-c_y)^2},\qquad
+\theta=\operatorname{atan2}(y-c_y,\;x-c_x)
+\]
+\[
+v_r=v_x\cos\theta+v_y\sin\theta,\qquad
+v_\theta=-v_x\sin\theta+v_y\cos\theta
+\]
+</div>
+
+<p>El centro \((c_x,c_y)\) se elige minimizando la dispersión de \(v_\theta\)
+dentro de cada anillo radial. Luego se arma un perfil radial: en cada bin de
+ancho \(\Delta r\) se toma la mediana de \(v_\theta\) y de \(v_r\).</p>
+
+<h2>2. Modelos</h2>
+
+<h3>Rankine (ec. 1)</h3>
+<div class="eq">
+\[
+v_\theta(r)=
+\begin{cases}
+\Omega r, & r\le R,\\[4pt]
+\dfrac{\Omega R^2}{r}, & r>R,
+\end{cases}
+\qquad v_r=0.
+\]
+</div>
+<p>\(\Omega\) es la velocidad angular del núcleo rígido, \(R\) el radio del
+núcleo y \(v_{\max}=\Omega R\).</p>
+
+<h3>Burgers (ec. 2)</h3>
+<div class="eq">
+\[
+v_r=-\frac{2\nu}{R^2}r,\qquad
+v_\theta=\frac{\Omega R^2}{r}\left(1-e^{-r^2/R^2}\right).
+\]
+</div>
+<p>\(\nu\) es la viscosidad cinemática. La componente radial permite estimar
+\(\nu\) a partir de la pendiente \(m\) de \(v_r=m r\):</p>
+<div class="eq">
+\[
+\nu=-\frac{mR^2}{2}. \tag{4}
+\]
+</div>
+
+<h2>3. Qué se ajusta y qué se deriva</h2>
+
+<p>En los dos modelos la componente tangencial se puede escribir como una
+amplitud por una forma. Para Burgers conviene definir</p>
+
+<div class="eq">
+\[
+K\equiv \Omega R^2.
+\]
+</div>
+
+<p>El código llama <code>K</code> a este producto. No es un parámetro físico
+independiente: es la combinación que fija la amplitud del perfil y la que se
+resuelve linealmente.</p>
+
+<h3>Rankine</h3>
+<p>El codo del perfil determina \(R\) y la amplitud determina \(\Omega\). Son
+separables: se ajustan ambos y después se calcula \(v_{\max}=\Omega R\).</p>
+
+<h3>Burgers</h3>
+<p>Para cada valor candidato de \(R\) se resuelve \(K\) por mínimos cuadrados
+ponderados, porque la curva es lineal en \(K\):</p>
+<div class="eq">
+\[
+v_\theta(r)=\frac{K}{r}\left(1-e^{-r^2/R^2}\right).
+\]
+</div>
+<p>El solver recorre \(R\), elige el que mejor ajusta la forma y conserva su
+\(K\). Después:</p>
+<div class="eq">
+\[
+\Omega=\frac{K}{R^2},\qquad
+\nu=-\frac{mR^2}{2}.
+\]
+</div>
+<p>Es decir: \(K\) se ajusta directamente; \(R\) sale de la forma; \(\Omega\) y
+\(\nu\) se derivan.</p>
+
+<div class="nota">
+<strong>Casos no acotados.</strong> Si el decaimiento exponencial no se ve
+dentro del radio medido, el ajuste empuja \(R\to\infty\). En ese caso solo
+queda determinada la combinación \(K\); \(R\) y la viscosidad derivada no son
+confiables. El informe los marca como “no acotado” y no muestra un error
+simétrico.
+</div>
+
+<h2>4. Propagación de errores</h2>
+
+<p>El error de cada bin combina dos contribuciones independientes: la dispersión
+estadística de las velocidades dentro del bin y la incertidumbre de medición de
+cada vínculo.</p>
+
+<div class="eq">
+\[
+\sigma_{\rm stat}=\frac{\rm MAD}{\sqrt{n}},\qquad
+\sigma_{\rm med}=\frac{\sigma_v}{\sqrt{n}},
+\]
+\[
+\sigma_v=\frac{\sqrt{2}\,\sigma_{\rm pos}}{ppm\,\Delta t},
+\qquad
+\sigma_{\rm bin}^2=\sigma_{\rm stat}^2+\sigma_{\rm med}^2.
+\]
+</div>
+
+<p>Con esos \(\sigma_{\rm bin}\) se hace un bootstrap sobre las medianas del
+perfil: se perturba cada mediana, se reajustan todos los modelos y se recalculan
+las cantidades derivadas. Eso da \(\sigma_{\rm boot}\).</p>
+
+<p>Además se agregan tres fuentes sistemáticas, reajustando todo el
+procedimiento:</p>
+
+<ul>
+  <li><strong>Calibración:</strong> se usa \(\sigma_D=0.5\) mm, es decir
+      \(\varepsilon=\sigma_D/D\). Se reajusta con \(ppm(1\pm\varepsilon)\),
+      escalando \(r\) y \(v\).</li>
+  <li><strong>Centro:</strong> se reajusta en centros desplazados alrededor del
+      óptimo y se toma la dispersión de cada parámetro.</li>
+  <li><strong>Binning:</strong> se reajusta con un ancho de bin \(25\,\%\)
+      mayor y menor, y se toma la semiamplitud.</li>
+</ul>
+
+<p>El error total de cada parámetro es la suma en cuadratura:</p>
+
+<div class="eq">
+\[
+\sigma_{\rm total}^2=
+\sigma_{\rm boot}^2+
+\sigma_{\rm cal}^2+
+\sigma_{\rm centro}^2+
+\sigma_{\rm binning}^2.
+\]
+</div>
+
+<p>Las cantidades derivadas (\(\Omega=K/R^2\), \(\nu=-mR^2/2\))
+se recalculan en cada muestra del bootstrap y en
+cada reajuste sistemático. Así se conservan las correlaciones dentro de cada
+fuente. La cuadratura entre fuentes es una aproximación de presupuesto de
+errores: calibración y centro son sistemáticos, de modo que
+\(\sigma_{\rm total}\) no debe interpretarse como un intervalo de confianza
+estricto.</p>
+
+<h2>5. Convención del sentido de giro</h2>
+
+<p>El eje \(y\) de la imagen apunta hacia abajo. Con la proyección usada, un
+\(v_\theta\) crudo negativo corresponde a un giro <strong>antihorario</strong>
+visto desde la cámara. Para ajustar los modelos se invierte el signo y se
+trabaja con \(v_\theta>0\); el sentido físico se guarda como texto en el
+informe.</p>
+
+<div class="eq">
+\[
+\text{sentido}=
+\begin{cases}
+\text{antihorario}, & \operatorname{mediana}(v_\theta^{\rm crudo})<0,\\
+\text{horario}, & \operatorname{mediana}(v_\theta^{\rm crudo})>0.
+\end{cases}
+\]
+</div>
+
+<h2>6. Significado de los parámetros</h2>
+
+<table>
+<thead><tr><th>Modelo</th><th>Parámetro</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td>Rankine</td><td>\(\Omega\)</td><td>velocidad angular del núcleo rígido</td></tr>
+<tr><td>Rankine</td><td>\(R\)</td><td>radio del núcleo (posición del máximo de \(v_\theta\))</td></tr>
+<tr><td>Rankine</td><td>\(v_{\max}\)</td><td>velocidad tangencial máxima, \(v_{\max}=\Omega R\)</td></tr>
+<tr><td>Burgers</td><td>\(K=\Omega R^2\)</td><td>amplitud del perfil tangencial; es lo que se ajusta linealmente</td></tr>
+<tr><td>Burgers</td><td>\(R\)</td><td>radio característico del decaimiento exponencial</td></tr>
+<tr><td>Burgers</td><td>\(\Omega\)</td><td>velocidad angular inferida como \(\Omega=K/R^2\)</td></tr>
+<tr><td>Burgers</td><td>\(\nu\)</td><td>viscosidad cinemática, \(\nu=-mR^2/2\)</td></tr>
+<tr><td>Todos</td><td>\(m\)</td><td>pendiente radial medida, \(v_r=m r\)</td></tr>
+</tbody>
+</table>
+
+<h2>7. Resumen del flujo</h2>
+
+<ol>
+  <li>Detección de partículas en cada cuadro y vínculos entre cuadros consecutivos.</li>
+  <li>Centro del vórtice por coherencia azimutal de \(v_\theta\).</li>
+  <li>Cálculo de \(r\), \(\theta\), \(v_r\), \(v_\theta\) por vínculo.</li>
+  <li>Perfil radial robusto por bins (mediana y MAD).</li>
+  <li>Ajuste de Rankine, Burgers y radial con pesos \(1/\sigma_{\rm bin}^2\).</li>
+  <li>Bootstrap sobre el perfil y reajustes de calibración, centro y binning.</li>
+  <li>Combinación cuadrática de las fuentes de error.</li>
+  <li>Informe con parámetros, significado, errores y gráficos.</li>
+</ol>
+
+</main>
+</body>
+</html>

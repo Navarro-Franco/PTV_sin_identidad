@@ -1,0 +1,13 @@
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+opencv-python>=4.8
+matplotlib>=3.7
+
+# Transcodifica el video de debug a H.264 para poder incrustarlo en el informe
+# HTML y que el navegador lo reproduzca.
+imageio-ffmpeg>=0.4
+
+# Sólo para la ventana interactiva de ajustar_recipiente.py.
+# En un equipo sin pantalla podés omitir PyQt5 y usar opencv-python-headless.
+PyQt5>=5.15

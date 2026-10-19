@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explicación — Detección de partículas y campo de velocidades</title>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0; background: #f5f6f8; color: #1c1e21; line-height: 1.55;
+  }
+  main { max-width: 1040px; margin: 0 auto; padding: 30px 26px 60px; }
+  h1 { font-size: 1.75rem; margin: 0 0 6px; line-height: 1.2; }
+  h2 {
+    font-size: 1.18rem; margin: 40px 0 12px; padding-bottom: 6px;
+    border-bottom: 1px solid #dcdde0;
+  }
+  h3 { font-size: 1.02rem; margin: 24px 0 8px; }
+  p, li { font-size: .96rem; }
+  .sub { color: #606770; font-size: .92rem; margin-bottom: 18px; }
+  .toc {
+    background: #fff; border-radius: 8px; padding: 14px 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06); margin: 18px 0 8px;
+  }
+  .toc ol { margin: 6px 0 0 20px; padding: 0; }
+  .toc li { margin: 3px 0; font-size: .92rem; }
+  .toc a { color: #2f5fb3; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  table {
+    border-collapse: collapse; width: 100%; background: #fff;
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06); margin: 12px 0 18px;
+  }
+  th, td {
+    padding: 9px 12px; text-align: left; border-bottom: 1px solid #eceef1;
+    font-size: .92rem; vertical-align: top;
+  }
+  th { background: #f0f2f5; font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  code {
+    background: #f0f2f5; padding: 1px 5px; border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .88em;
+  }
+  pre {
+    background: #1f2430; color: #e7eaf0; padding: 14px 16px;
+    border-radius: 8px; overflow-x: auto; font-size: .88rem;
+    line-height: 1.45;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  .eq {
+    background: #fff; border-radius: 8px; padding: 10px 16px;
+    margin: 12px 0; overflow-x: auto;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  .nota, .aviso, .clave {
+    background: #fff; border-left: 4px solid #4c7bd9;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    color: #3b3f46; font-size: .94rem;
+  }
+  .aviso { border-left-color: #d9822b; }
+  .clave { border-left-color: #2e9e5b; }
+  .nota strong, .aviso strong, .clave strong { color: #1c1e21; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border-radius: 8px; padding: 14px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  .card h3 { margin-top: 0; }
+  .pill {
+    display: inline-block; font-size: .74rem; font-weight: 700;
+    padding: 2px 7px; border-radius: 999px; vertical-align: middle;
+    letter-spacing: .02em;
+  }
+  .pill.final { background: #e3f4e9; color: #1d6b3a; }
+  .pill.prev { background: #e8eefc; color: #2a4f9e; }
+  .pill.explore { background: #fff1df; color: #8a5319; }
+  figure {
+    margin: 14px 0; background: #fff; border-radius: 8px; padding: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  figure img { width: 100%; display: block; border-radius: 4px; }
+  figcaption { color: #606770; font-size: .86rem; padding: 8px 4px 0; }
+  .figgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .figgrid { grid-template-columns: 1fr; } }
+  .parrafo {
+    background: #fff; border: 1px solid #d9dde3; border-radius: 8px;
+    padding: 18px 20px; font-size: .97rem; line-height: 1.65;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  .btn {
+    display: inline-block; margin-top: 10px; border: 0; border-radius: 6px;
+    background: #2f5fb3; color: #fff; padding: 8px 14px; cursor: pointer;
+    font-size: .88rem; font-weight: 600;
+  }
+  .btn:hover { background: #244b91; }
+  .refs li { margin-bottom: 9px; }
+  .small { font-size: .86rem; color: #606770; }
+  details {
+    background: #fff; border-radius: 8px; padding: 10px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06); margin: 12px 0;
+  }
+  summary { cursor: pointer; font-weight: 600; font-size: .92rem; }
+  .footer {
+    margin-top: 46px; padding-top: 14px; border-top: 1px solid #dcdde0;
+    color: #606770; font-size: .84rem;
+  }
+  @media print {
+    body { background: #fff; }
+    main { max-width: none; padding: 0; }
+    .btn, .toc { display: none; }
+    h2 { break-after: avoid; }
+    figure, table, .eq, .card, .parrafo { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Detección de partículas y medición del campo de velocidades</h1>
+<div class="sub">
+  Explicación del programa en Python
+  <span class="pill final">versión final</span>
+</div>
+
+<nav class="toc">
+  <strong>Contenido</strong>
+  <ol>
+    <li><a href="#idea">Idea central</a></li>
+    <li><a href="#origen">Relación con PIV y PTV</a></li>
+    <li><a href="#deteccion">Detección cuadro a cuadro</a></li>
+    <li><a href="#vinculos">Vínculos y velocidades</a></li>
+    <li><a href="#analisis">Análisis del campo</a></li>
+    <li><a href="#parametros">Parámetros que se tocan</a></li>
+    <li><a href="#porque">Por qué funciona sin seguir partículas</a></li>
+    <li><a href="#limites">Límites y supuestos</a></li>
+    <li><a href="#parrafo">Párrafo breve para el informe</a></li>
+    <li><a href="#figuras">Figuras de ejemplo</a></li>
+    <li><a href="#referencias">Referencias para citar</a></li>
+  </ol>
+</nav>
+
+<!-- ==================================================================== -->
+<h2 id="idea">1. Idea central</h2>
+
+<p>
+  El programa <strong>no sigue partículas con identidad</strong>. Lo que hace es:
+</p>
+<ol>
+  <li>Detectar <strong>todas</strong> las manchas amarillas de glitter en cada cuadro.</li>
+  <li>Emparejar cada detección del cuadro \(f\) con la más parecida del cuadro \(f+1\).</li>
+  <li>Usar esos pares —llamados <strong>vínculos</strong>— para calcular velocidades.</li>
+</ol>
+
+<p>
+  No importa “quién es quién”: importa <strong>dónde</strong> y <strong>cuánto</strong>
+  se movió el fluido en esa zona. Como el vórtice es estacionario, suave y
+  axisimétrico, los vínculos muestrean bien el campo aunque el emparejamiento
+  cambie de partícula física entre cuadros.
+</p>
+
+<div class="clave">
+  <strong>En una frase:</strong> se detectan todas las partículas en cada cuadro y
+  se emparejan con el cuadro siguiente por vecino mutuo; esos pares dan un campo
+  de velocidades, no trayectorias largas.
+</div>
+
+<p>
+  La idea conceptual es la misma que la de <strong>PIV</strong>
+  (<em>Particle Image Velocimetry</em>): sembrar el fluido con trazadores y medir
+  desplazamientos locales. Técnicamente, esta versión es más bien
+  <strong>PTV sin identidad</strong> (detección de partículas + emparejamiento
+  puntual), no PIV clásico por correlación de ventanas.
+</p>
+
+<table>
+  <thead>
+    <tr><th></th><th>Tracker tradicional</th><th>Este programa</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Objetos simultáneos</td><td>Pocos, todos distinguibles</td><td>80–120 manchas parecidas</td></tr>
+    <tr><td>Identidad</td><td>Cada partícula tiene un ID persistente</td><td>No existe ID</td></tr>
+    <tr><td>Trayectoria</td><td>Larga, de punta a punta</td><td>Par de cuadros consecutivos</td></tr>
+    <tr><td>Modelo de movimiento</td><td>Se predice la posición</td><td>Solo “el más cercano”</td></tr>
+    <tr><td>Qué mide</td><td>Historia de cada partícula</td><td>El campo de velocidades</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================================================================== -->
+<h2 id="origen">2. Relación con PIV y PTV</h2>
+
+<p>
+  La idea conceptual es la misma que la de <strong>PIV</strong>
+  (<em>Particle Image Velocimetry</em>): sembrar el fluido con trazadores y medir
+  desplazamientos locales. La diferencia es cómo se obtiene el desplazamiento:
+</p>
+
+<table>
+  <thead>
+    <tr><th></th><th>PIV clásico</th><th>Este programa</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cómo mide</td>
+      <td>Correlación de ventanas entre dos imágenes</td>
+      <td>Detección de blobs + vecino mutuo punto a punto</td>
+    </tr>
+    <tr>
+      <td>Identidad</td>
+      <td>No hay IDs; se mide un campo promedio por ventana</td>
+      <td>No hay IDs; cada par de cuadros aporta un vector</td>
+    </tr>
+    <tr>
+      <td>Trazadores</td>
+      <td>Alta densidad, tamaño controlado</td>
+      <td>Muchas partículas chiquitas e indistinguibles</td>
+    </tr>
+    <tr>
+      <td>Qué se obtiene</td>
+      <td>Campo de velocidades por ventana</td>
+      <td>Campo de velocidades por vínculo</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Técnicamente, esta versión es <strong>PTV sin identidad</strong>: detección de
+  partículas y emparejamiento puntual, sin trayectorias largas. No usa Trackpy,
+  OpenPIV ni asignación Húngara. El detector usa OpenCV, NumPy y pandas, y un
+  emparejamiento propio por vecino mutuo.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="deteccion">3. Detección cuadro a cuadro</h2>
+
+<p>
+  El archivo principal es <a href="detectar_glitter.py"><code>detectar_glitter.py</code></a>.
+  El pipeline es el siguiente.
+</p>
+
+<h3>3.1. Lectura y escala</h3>
+<p>
+  El video se lee con OpenCV. Por defecto se procesa a <strong>mitad de escala</strong>
+  (<code>--scale 0.5</code>) para ganar velocidad; luego las coordenadas se devuelven
+  a píxeles del cuadro original.
+</p>
+
+<h3>3.2. Fondo temporal</h3>
+<p>
+  Se muestrean unos <strong>40 cuadros</strong> repartidos en todo el video y se calcula,
+  <strong>píxel por píxel</strong>, la mediana:
+</p>
+<div class="eq">
+\[
+  bg(x,y) = \operatorname{mediana}_{t}\big[\, frame_t(x,y) \,\big]
+\]
+</div>
+<p>
+  Como el glitter se mueve, casi nunca está en el mismo píxel; la mediana lo borra.
+  Lo estático —mesa, vidrio, reflejos fijos— sobrevive. Está implementado en
+  <code>construir_fondo</code>, <a href="detectar_glitter.py"><code>detectar_glitter.py</code></a>:104.
+</p>
+
+<h3>3.3. Filtro de color</h3>
+<p>
+  En vez de usar la imagen a color completa, se calcula un valor por píxel que mide
+  “cuán amarillo” es:
+</p>
+<div class="eq">
+\[
+  \text{amarillo} = \frac{G+R}{2} - B
+\]
+</div>
+<p>
+  Para el glitter amarillo da alto; para algo blanco o gris da casi 0; para algo
+  azulado da negativo. Está en <code>filtro</code>,
+  <a href="detectar_glitter.py"><code>detectar_glitter.py</code></a>:72, y el caso
+  <code>yellow</code> en la línea 85.
+</p>
+<p>
+  Hay otros filtros: <code>green</code>, <code>red</code>, <code>blue</code>,
+  <code>magenta</code>, <code>greenx2</code>, <code>white</code>, <code>maxc</code>,
+  <code>sat</code>, <code>gray</code>. Con <code>--filtro auto</code> se prueban varios
+  sobre cuadros de muestra y se elige el que da más detecciones medianas dentro del ROI
+  (<code>elegir_filtro_auto</code>, línea 260).
+</p>
+
+<div class="nota">
+  <strong>Ojo:</strong> <code>--filtro auto</code> elige el filtro que da más
+  detecciones medianas dentro del ROI, no el que produce el mejor ajuste. Para un
+  video ya caracterizado conviene fijar el filtro a mano (por ejemplo,
+  <code>--filtro yellow</code> o <code>--filtro magenta</code>).
+</div>
+
+<h3>3.4. Resta de fondo</h3>
+<p>Se aplica el mismo filtro al cuadro y al fondo, y se resta:</p>
+<div class="eq">
+\[
+  diff = \text{filtro}(cuadro) - \text{filtro}(fondo)
+\]
+</div>
+<p>
+  Lo que aparece brillante en \(diff\) es lo que se movió o apareció respecto del fondo.
+</p>
+
+<h3>3.5. Umbral robusto</h3>
+<p>No se usa un umbral fijo. Se estima el ruido de la resta con la <strong>MAD</strong>
+  (<em>Median Absolute Deviation</em>):</p>
+<div class="eq">
+\[
+  \sigma_{\text{robusto}} = 1.4826 \cdot
+  \operatorname{mediana}\!\left(\left|diff - \operatorname{mediana}(diff)\right|\right)
+\]
+\[
+  umbral = \max\left(3.0,\; k \cdot \sigma_{\text{robusto}}\right)
+\]
+</div>
+<p>
+  Con \(k=6\) por defecto. El factor \(1.4826\) hace que, para ruido gaussiano, la MAD
+  sea comparable a un desvío estándar. Ventaja: si el video es más ruidoso u oscuro,
+  el umbral se adapta solo. Está en <code>sigma_mad</code> (línea 143) y
+  <code>umbral_robusto</code> (línea 149).
+</p>
+
+<h3>3.6. Máscara, morfología y componentes conexas</h3>
+<p>Se forma la máscara:</p>
+<div class="eq">
+\[
+  \text{máscara} = \big[\, diff > umbral \,\big]
+\]
+</div>
+<p>Luego:</p>
+<ul>
+  <li><strong>apertura</strong> con kernel \(2\times2\): elimina píxeles aislados;</li>
+  <li><strong>cierre</strong> con kernel \(3\times3\): rellena huecos pequeños;</li>
+  <li><strong>componentes conexas</strong> con conectividad 8
+    (<code>cv2.connectedComponentsWithStats</code>).</li>
+</ul>
+<p>
+  Cada componente es un <strong>blob</strong> candidato. Se descartan los que tienen
+  área fuera de:
+</p>
+<div class="eq">
+\[
+  min\_area = 3\ \text{px}^2, \qquad max\_area = 300\ \text{px}^2
+\]
+</div>
+<p>
+  (a la escala de procesamiento). Ese rango de área es, en la práctica, el criterio
+  que define “qué es una partícula”. Está en <code>detectar</code>, línea 154.
+</p>
+
+<h3>3.7. Centroide subpíxel</h3>
+<p>
+  La posición no es el centro de la caja del blob, sino el
+  <strong>centroide pesado por intensidad</strong>:
+</p>
+<div class="eq">
+\[
+  c_x = \frac{\sum_i I_i\,x_i}{\sum_i I_i}, \qquad
+  c_y = \frac{\sum_i I_i\,y_i}{\sum_i I_i}
+\]
+</div>
+<p>
+  Los píxeles más brillantes pesan más. Eso da precisión por debajo del píxel.
+  También se guarda el pico de intensidad. Las coordenadas se dividen por
+  <code>--scale</code> para volver al cuadro original.
+</p>
+
+<h3>3.8. ROI y calibración</h3>
+<p>
+  Las detecciones fuera de la <strong>elipse del recipiente</strong> se descartan
+  (<code>dentro_elipse</code>, línea 239). El ROI y la escala salen de un JSON generado
+  por <a href="ajustar_recipiente.py"><code>ajustar_recipiente.py</code></a>:
+</p>
+<div class="eq">
+\[
+  \text{px\_per\_mm} = \frac{\text{diámetro\_px}}{\text{diámetro\_real\_mm}}
+\]
+</div>
+<p>
+  La herramienta abre un cuadro o el fondo temporal y permite ajustar a mano un círculo
+  sobre la zona de diámetro conocido. Guarda
+  <code>cx, cy, a, b, ang, diam_px, px_per_mm, diametro_mm, diametro_mm_err</code>.
+  Ver <a href="ajustar_recipiente.py"><code>ajustar_recipiente.py</code></a>:240–264.
+</p>
+<p>
+  Si no se pasa <code>--roi-json</code>, el programa intenta estimar el borde del fluido
+  automáticamente: traza rayos desde el centro, busca la última transición
+  oscuro→claro y ajusta una elipse con <code>cv2.fitEllipse</code>
+  (<code>estimar_roi_fluido</code>, línea 194). También se puede pasar
+  <code>--px-per-mm</code> directamente.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="vinculos">4. Vínculos y velocidades</h2>
+
+<p>Para cada par de cuadros \(f\) y \(f+1\):</p>
+<ol>
+  <li>Se calcula la matriz de distancias entre todas las detecciones de \(f\)
+    y todas las de \(f+1\).</li>
+  <li>Para cada punto de \(f\) se busca el más cercano en \(f+1\).</li>
+  <li>Para cada punto de \(f+1\) se busca el más cercano en \(f\).</li>
+  <li>Se conserva el par <strong>solo si la elección es recíproca</strong>
+    (vecino mutuo) y si la distancia es menor o igual a una compuerta.</li>
+</ol>
+
+<div class="eq">
+\[
+  gate\_px = gate\_mm \cdot \text{px\_per\_mm}
+\]
+</div>
+
+<p>
+  Por defecto <code>gate_mm = 2.5 mm</code>. La regla práctica es:
+</p>
+<div class="eq">
+\[
+  gate\_mm \approx 1.5 \cdot \frac{v_{max,\text{esperado}}}{fps}
+\]
+</div>
+
+<p>
+  Está implementado en <code>vincular</code>,
+  <a href="detectar_glitter.py"><code>detectar_glitter.py</code></a>:308.
+</p>
+
+<h3>4.1. Velocidad</h3>
+<p>Para cada vínculo:</p>
+<div class="eq">
+\[
+  dx = x_1 - x_0, \qquad dy = y_1 - y_0, \qquad dt = \frac{1}{fps}
+\]
+\[
+  v_x = \frac{dx}{dt}, \qquad v_y = \frac{dy}{dt}
+\]
+</div>
+<p>
+  También se guarda el punto medio, su radio respecto del centro del ROI y las
+  componentes en mm/s. Todo esto se escribe en <code>vinculos.csv</code>
+  (líneas 553–581).
+</p>
+
+<h3>4.2. Video de debug</h3>
+<p>Opcionalmente se genera un video con:</p>
+<ul>
+  <li>círculos verdes en las detecciones;</li>
+  <li>flechas verdes desde la posición en \(f\) hasta la posición en \(f+1\);</li>
+  <li>factor de exageración <code>--flecha-ganancia</code> (por defecto 5), porque el
+    desplazamiento real entre cuadros es de pocos píxeles.</li>
+</ul>
+<p>
+  Se escribe un cuadro de salida por cada cuadro procesado, para que quede sincronizado
+  con el video original (líneas 446–529).
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="analisis">5. Análisis del campo</h2>
+
+<p>
+  El archivo de análisis es <a href="analizar_glitter.py"><code>analizar_glitter.py</code></a>.
+</p>
+
+<h3>5.1. Centro del vórtice</h3>
+<p>
+  No se usa directamente el centro del ROI. Se prueban centros candidatos en una grilla
+  de \(\pm 6\) mm alrededor del centro del ROI, con paso de 0.5 mm. Para cada candidato:
+</p>
+<ol>
+  <li>Se calculan \(r\), \(\theta\), \(v_r\), \(v_\theta\) de todos los vínculos.</li>
+  <li>Se agrupan por anillos radiales.</li>
+  <li>Se mide la dispersión robusta (MAD) de \(v_\theta\) dentro de cada anillo.</li>
+  <li>Se elige el centro que <strong>minimiza</strong> esa dispersión.</li>
+</ol>
+<p>
+  La idea es la <strong>coherencia azimutal</strong>: si el centro es correcto, todos los
+  puntos de un mismo radio tienen aproximadamente la misma \(v_\theta\). Ver
+  <code>dispersion_vt</code> (línea 95) y <code>optimizar_centro</code> (línea 113).
+</p>
+
+<h3>5.2. Componentes polares</h3>
+<p>Para cada vínculo, respecto del centro \((c_x,c_y)\):</p>
+<div class="eq">
+\[
+  r = \sqrt{(x-c_x)^2+(y-c_y)^2}, \qquad
+  \theta = \operatorname{atan2}(y-c_y,\;x-c_x)
+\]
+\[
+  v_r = v_x\cos\theta + v_y\sin\theta, \qquad
+  v_\theta = -v_x\sin\theta + v_y\cos\theta
+\]
+</div>
+<p>Está en <code>componentes</code>, línea 86.</p>
+
+<h3>5.3. Sentido de giro</h3>
+<p>
+  El eje \(y\) de la imagen apunta hacia abajo. Con esta convención, un \(v_\theta\)
+  crudo negativo corresponde a giro <strong>antihorario</strong> visto desde la cámara.
+  El programa guarda el sentido como texto y cambia el signo solo para los ajustes
+  (líneas 964–969).
+</p>
+
+<h3>5.4. Recorte de outliers</h3>
+<p>
+  Dentro de cada bin radial se eliminan los valores que se alejan más de
+  <strong>\(5\cdot\)MAD</strong> de la mediana del bin, tanto para \(v_r\) como para
+  \(v_\theta\). Está en <code>clip_outliers</code>, línea 157.
+</p>
+
+<h3>5.5. Perfil radial</h3>
+<p>
+  Se divide el radio en bins de <strong>1 mm</strong> (<code>--bin-mm 1.0</code>).
+  En cada bin, con al menos 5 puntos:
+</p>
+<ul>
+  <li>mediana de \(v_\theta\) y de \(v_r\);</li>
+  <li>MAD de cada una;</li>
+  <li>error estándar \(= \text{MAD}/\sqrt{n}\).</li>
+</ul>
+<p>
+  Ese error estadístico se combina en cuadratura con el error de medición:
+</p>
+<div class="eq">
+\[
+  \sigma_{\text{bin}}^2 = \sigma_{\text{estadístico}}^2 +
+  \left(\frac{\sigma_v}{\sqrt{n}}\right)^2
+\]
+</div>
+<p>
+  Ver <code>perfil_radial</code> (línea 137) y <code>agregar_error_medicion</code>
+  (línea 347).
+</p>
+
+<h3>5.6. Error de posición y de velocidad</h3>
+<p>
+  Se repite la detección con dos umbrales distintos (\(k=5\) y \(k=7\)) sobre cuadros
+  sueltos. Se emparejan las detecciones con vecino mutuo y se mide el corrimiento de
+  los centroides. Eso da \(\sigma_{\text{pos}}\) en píxeles. Luego:
+</p>
+<div class="eq">
+\[
+  \sigma_v = \sqrt{2}\,\frac{\sigma_{\text{pos}}}{\text{px\_per\_mm}}\,\frac{1}{dt}
+\]
+</div>
+<p>
+  El \(\sqrt{2}\) aparece porque hay dos mediciones independientes de posición
+  (cuadro \(f\) y \(f+1\)). Ver <code>sigma_posicion</code>, línea 479.
+</p>
+
+<h3>5.7. Modelos ajustados</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modelo</th>
+      <th>\(v_\theta(r)\)</th>
+      <th>\(v_r(r)\)</th>
+      <th>Parámetros</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Rankine</strong></td>
+      <td>\(\Omega r\) si \(r\le R\); \(\Omega R^2/r\) si \(r>R\)</td>
+      <td>\(0\)</td>
+      <td>\(\Omega\), \(R\), \(v_{max}=\Omega R\)</td>
+    </tr>
+    <tr>
+      <td><strong>Burgers</strong></td>
+      <td>\(\dfrac{\Omega R^2}{r}\left(1-e^{-r^2/R^2}\right)\)</td>
+      <td>\(-\dfrac{2\nu}{R^2}r\)</td>
+      <td>\(\Omega\), \(R\), \(\nu\); \(K=\Omega R^2\)</td>
+    </tr>
+    <tr>
+      <td><strong>Radial</strong></td>
+      <td>—</td>
+      <td>\(m r\)</td>
+      <td>\(m\) (diagnóstico)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Rankine.</strong> Se busca \(R\) con una grilla 1D y, para cada \(R\), se
+  resuelve \(\Omega\) por mínimos cuadrados lineales. Ver <code>fit_rankine</code>,
+  línea 250.</p>
+
+<p><strong>Burgers.</strong> Se busca \(R\) con una grilla 1D y, para cada \(R\), se
+  ajusta linealmente \(K=\Omega R^2\). Luego:</p>
+<div class="eq">
+\[
+  \Omega = \frac{K}{R^2}, \qquad \nu = -\frac{mR^2}{2}
+\]
+</div>
+<p>
+  donde \(m\) es la pendiente del ajuste radial \(v_r=mr\). Ver <code>fit_burgers</code>
+  (línea 271) y <code>fit_radial</code> (línea 315).
+</p>
+
+<h3>5.8. Ajuste ponderado</h3>
+<p>Todos los ajustes usan pesos:</p>
+<div class="eq">
+\[
+  w = \frac{1}{\sigma_{\text{bin}}^2}
+\]
+</div>
+<p>
+  La búsqueda 1D se hace con una grilla gruesa y refinamientos locales para que el
+  parámetro no quede cuantizado por la grilla. Ver <code>_optimizar_1d</code>,
+  línea 227.
+</p>
+
+<h3>5.9. Errores: bootstrap y sistemáticos</h3>
+<ul>
+  <li><strong>Bootstrap:</strong> se perturba cada mediana del perfil con
+    \(\mathcal{N}(0,\sigma_{\text{bin}})\), se vuelven a ajustar todos los modelos y
+    se recalculan las cantidades derivadas. Con 300 remuestreos se obtiene la media y
+    el desvío de cada parámetro (<code>bootstrap_perfil</code>, línea 433).</li>
+  <li><strong>Calibración:</strong> se reajusta con <code>px_per_mm</code> escalado por
+    \(1\pm\sigma_D/D\), con \(\sigma_D=0.5\) mm.</li>
+  <li><strong>Centro:</strong> se reajusta con el centro desplazado \(\pm0.25\) mm en
+    cuatro direcciones.</li>
+  <li><strong>Binning:</strong> se reajusta con un ancho de bin 25 % mayor y 25 % menor.</li>
+</ul>
+<p>Las fuentes se combinan en cuadratura:</p>
+<div class="eq">
+\[
+  \sigma_{\text{total}}^2 =
+  \sigma_{\text{bootstrap}}^2 +
+  \sigma_{\text{calibración}}^2 +
+  \sigma_{\text{centro}}^2 +
+  \sigma_{\text{binning}}^2
+\]
+</div>
+<p>
+  Ver <code>_combinar_errores</code>, línea 404. El script
+  <a href="validar_errores.py"><code>validar_errores.py</code></a> verifica que se
+  cumplan las relaciones entre parámetros derivados.
+</p>
+
+<h3>5.10. Salidas</h3>
+<ul>
+  <li><code>perfil.csv</code>: perfil radial por bins;</li>
+  <li><code>resultados.json</code>: parámetros, bootstrap, errores y metadatos;</li>
+  <li><code>vtheta_vs_r.png</code>, <code>vr_vs_r.png</code>,
+    <code>centro_vortice.png</code>, <code>densidad_detecciones.png</code>;</li>
+  <li><code>informe.html</code>: informe autocontenido, con figuras y video embebidos
+    en base64. El video se transcodifica a H.264 con <code>imageio-ffmpeg</code> para
+    que el navegador lo reproduzca.</li>
+</ul>
+
+<!-- ==================================================================== -->
+<h2 id="parametros">6. Parámetros que se tocan</h2>
+
+<table>
+  <thead>
+    <tr><th>Parámetro</th><th>Default</th><th>Qué controla</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--filtro</code></td><td><code>yellow</code></td><td>Filtro de color; <code>auto</code> prueba varios.</td></tr>
+    <tr><td><code>--k</code></td><td>6</td><td>Umbral \(= k\cdot\)MAD. Más alto: detecta menos y más brillante.</td></tr>
+    <tr><td><code>--min-area</code></td><td>3 px²</td><td>Área mínima del blob.</td></tr>
+    <tr><td><code>--max-area</code></td><td>300 px²</td><td>Área máxima; descarta grupos pegados o reflejos.</td></tr>
+    <tr><td><code>--gate-mm</code></td><td>2.5 mm</td><td>Distancia máxima de vínculo. Más grande: permite saltos, pero mete vínculos falsos.</td></tr>
+    <tr><td><code>--scale</code></td><td>0.5</td><td>Escala de procesamiento. Más alta: más resolución y más lento.</td></tr>
+    <tr><td><code>--bg-frames</code></td><td>40</td><td>Cuadros para la mediana del fondo.</td></tr>
+    <tr><td><code>--bin-mm</code></td><td>1.0</td><td>Ancho de los bins radiales del análisis.</td></tr>
+    <tr><td><code>--bootstrap</code></td><td>300</td><td>Remuestreos para el error de parámetros.</td></tr>
+  </tbody>
+</table>
+
+<details>
+  <summary>Comandos típicos del flujo completo</summary>
+<pre><code># 1) Calibrar: ajustar un círculo sobre la zona de diámetro conocido y guardar con "s"
+python3 ajustar_recipiente.py \
+    --video ruta/al/video.mp4 --bg \
+    --diametro-mm 90 \
+    --salida resultados/ejemplo/recipiente.json
+
+# 2) Detectar todas las partículas + vínculos + video de debug
+python3 detectar_glitter.py \
+    --video ruta/al/video.mp4 \
+    --roi-json resultados/ejemplo/recipiente.json \
+    --output  resultados/ejemplo/detecciones.csv \
+    --links   resultados/ejemplo/vinculos.csv \
+    --bg-cache resultados/ejemplo/bg.png \
+    --debug-video resultados/ejemplo/deteccion.mp4
+
+# 3) Analizar: perfil, modelos, errores, figuras e informe
+python3 analizar_glitter.py \
+    --dir resultados/ejemplo \
+    --titulo "ejemplo"</code></pre>
+</details>
+
+<!-- ==================================================================== -->
+<h2 id="porque">7. Por qué funciona sin seguir partículas</h2>
+
+<p>
+  Porque lo que se mide no es la partícula, sino el <strong>campo de velocidades del
+  fluido</strong>. El vórtice es:
+</p>
+<ul>
+  <li><strong>estacionario:</strong> no cambia en el tiempo;</li>
+  <li><strong>suave:</strong> partículas vecinas se mueven parecido;</li>
+  <li><strong>axisimétrico:</strong> la velocidad depende principalmente de \(r\).</li>
+</ul>
+<p>
+  Entonces, aunque un vínculo empareje por error dos partículas físicas distintas, el
+  desplazamiento medido en esa zona sigue siendo representativo de la velocidad del
+  fluido allí. Importa <strong>dónde</strong> y <strong>cuánto</strong>, no
+  <strong>quién</strong>.
+</p>
+<p>
+  Con ~85 detecciones por cuadro y ~50 000 vínculos, el campo queda muy bien
+  muestreado.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="limites">8. Límites y supuestos</h2>
+
+<div class="grid2">
+  <div class="card">
+    <h3>Supuestos que usa</h3>
+    <ul>
+      <li>El flujo es estacionario.</li>
+      <li>El campo es suave y axisimétrico.</li>
+      <li>El glitter actúa como trazador pasivo.</li>
+      <li>La calibración px/mm es conocida.</li>
+      <li>El fondo es estático o cambia poco.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Dónde puede fallar</h3>
+    <ul>
+      <li>Centro: más densidad, brillo y partículas solapadas.</li>
+      <li>Compuerta demasiado grande: vínculos falsos y flechas largas.</li>
+      <li>Movimiento fuera de plano.</li>
+      <li>Reflejos y cambios de iluminación.</li>
+      <li>Calibración y centro como errores sistemáticos.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="nota">
+  <strong>No es PIV clásico.</strong> Es un método liviano de detección de partículas +
+  emparejamiento puntual. La analogía con PIV es conceptual: sembrar trazadores y medir
+  desplazamientos locales.
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="parrafo">9. Párrafo breve para el informe</h2>
+
+<div class="parrafo" id="parrafo-informe">
+  Para medir el campo de velocidades se usó un método de velocimetría por imágenes de
+  partículas sin seguimiento de identidad. En cada cuadro se construye un fondo temporal
+  por mediana, se aplica un filtro de color amarillo, se resta el fondo y se umbraliza
+  con k·MAD; las componentes conexas con área entre 3 y 300 px² se detectan como
+  partículas y su centroide se calcula con precisión subpíxel. Luego, cada detección del
+  cuadro f se empareja con la más cercana del cuadro f+1 exigiendo reciprocidad (vecino
+  mutuo) y una compuerta de 2.5 mm; el par define un vínculo y su velocidad es Δx/Δt.
+  Como el vórtice es estacionario y axisimétrico, no hace falta seguir la misma
+  partícula: los vínculos muestrean el campo. Con los vínculos se calculan r, θ, v_r y
+  v_θ respecto de un centro optimizado por coherencia azimutal, se arma un perfil radial
+  robusto (mediana y MAD por bins) y se ajustan los modelos de Rankine y
+  Burgers. Los errores se estiman por bootstrap y por reajustes de calibración,
+  centro y binning, combinados en cuadratura.
+</div>
+<button class="btn" id="btn-copiar" onclick="copiarParrafo()">Copiar párrafo</button>
+
+<script>
+function copiarParrafo() {
+  const el = document.getElementById('parrafo-informe');
+  const texto = el.innerText.replace(/\s+/g, ' ').trim();
+  const btn = document.getElementById('btn-copiar');
+  const listo = () => {
+    btn.textContent = 'Copiado';
+    setTimeout(() => { btn.textContent = 'Copiar párrafo'; }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(listo).catch(() => seleccionar(el));
+  } else {
+    seleccionar(el);
+  }
+}
+function seleccionar(el) {
+  const r = document.createRange();
+  r.selectNodeContents(el);
+  const s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
+}
+</script>
+
+<!-- ==================================================================== -->
+<h2 id="figuras">10. Figuras de ejemplo</h2>
+
+<p class="small">
+  Figuras generadas por el pipeline en <code>ejemplos/30_2_5/</code>. Sirven como
+  ejemplo visual; los valores numéricos dependen del video y de la calibración.
+</p>
+
+<div class="figgrid">
+  <figure>
+    <img src="ejemplos/30_2_5/vtheta_vs_r.png" alt="v_theta vs r">
+    <figcaption>Perfil de velocidad tangencial \(v_\theta(r)\) con los modelos superpuestos.</figcaption>
+  </figure>
+  <figure>
+    <img src="ejemplos/30_2_5/vr_vs_r.png" alt="v_r vs r">
+    <figcaption>Perfil de velocidad radial \(v_r(r)\).</figcaption>
+  </figure>
+  <figure>
+    <img src="ejemplos/30_2_5/centro_vortice.png" alt="centro del vórtice">
+    <figcaption>Búsqueda del centro: dispersión de \(v_\theta\) para cada centro candidato.</figcaption>
+  </figure>
+  <figure>
+    <img src="ejemplos/30_2_5/densidad_detecciones.png" alt="densidad de detecciones">
+    <figcaption>Densidad de detecciones y centros (ROI y vórtice).</figcaption>
+  </figure>
+</div>
+
+<p class="small">
+  Informe completo de ejemplo:
+  <a href="ejemplos/30_2_5/informe.html">ejemplos/30_2_5/informe.html</a>
+  (autocontenido, con figuras y video embebidos).
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="referencias">11. Referencias para citar</h2>
+
+<h3>11.1. Referencias que ya están explícitas en el proyecto</h3>
+<p class="small">
+  Son las únicas que aparecen como bibliografía formal en
+  <a href="docs/analisis_formulas.pdf"><code>docs/analisis_formulas.pdf</code></a>.
+</p>
+<ol class="refs">
+  <li>
+    <strong>[1]</strong> D. J. Acheson. <em>Elementary Fluid Dynamics</em>.
+    Oxford University Press, 1990. ISBN 0-19-859679-0.
+    <span class="small">→ Modelo de Rankine.</span>
+  </li>
+  <li>
+    <strong>[2]</strong> J. M. Burgers. “A mathematical model illustrating the theory
+    of turbulence”. En <em>Advances in Applied Mechanics</em>. Elsevier, 1948.
+    ISBN 978-0-12-374579-8.
+    <span class="small">→ Modelo de Burgers.</span>
+  </li>
+</ol>
+
+<div class="aviso">
+  En el PDF figura “Cmabridge University Press”; es un typo, va “Cambridge”.
+</div>
+
+<h3>11.2. Referencias metodológicas sugeridas</h3>
+<p class="small">
+  No están citadas explícitamente en el repositorio, pero son las referencias estándar
+  si en el informe se mencionan PIV, Trackpy, MAD, bootstrap, etc.
+</p>
+
+<strong>PIV / velocimetría por imágenes</strong>
+<ul class="refs">
+  <li>
+    R. J. Adrian. “Particle-imaging techniques for experimental fluid mechanics”.
+    <em>Annual Review of Fluid Mechanics</em>, 23 (1991), 261–304.
+    DOI: 10.1146/annurev.fl.23.010191.001401.
+  </li>
+  <li>
+    M. Raffel, C. E. Willert, F. Scarano, C. J. Kähler, S. T. Wereley y J. Kompenhans.
+    <em>Particle Image Velocimetry: A Practical Guide</em>. 3.ª ed., Springer, 2018.
+    ISBN 978-3-319-68851-0.
+  </li>
+  <li>
+    C. E. Willert y M. Gharib. “Digital particle image velocimetry”.
+    <em>Experiments in Fluids</em>, 10 (1991), 181–193. DOI: 10.1007/BF00190388.
+  </li>
+</ul>
+
+<strong>Detección y seguimiento de partículas</strong>
+<ul class="refs">
+  <li>
+    J. C. Crocker y D. G. Grier. “Methods of digital video microscopy for colloidal
+    studies”. <em>Journal of Colloid and Interface Science</em>, 179(1) (1996),
+    298–310. DOI: 10.1006/jcis.1996.0217.
+    <span class="small">→ Algoritmo que implementa Trackpy.</span>
+  </li>
+  <li>
+    Trackpy: documentación y código,
+    <a href="https://soft-matter.github.io/trackpy">https://soft-matter.github.io/trackpy</a>.
+    <span class="small">→ Solo en versiones exploratorias; no en el código final.</span>
+  </li>
+  <li>
+    H. W. Kuhn. “The Hungarian method for the assignment problem”.
+    <em>Naval Research Logistics Quarterly</em>, 2(1–2) (1955), 83–97.
+    DOI: 10.1002/nav.3800020109.
+    <span class="small">→ Referencia del método de asignación; no se usa en este código.</span>
+  </li>
+</ul>
+
+<strong>Estadística robusta y errores</strong>
+<ul class="refs">
+  <li>
+    P. J. Rousseeuw y C. Croux. “Alternatives to the median absolute deviation”.
+    <em>Journal of the American Statistical Association</em>, 88(424) (1993),
+    1273–1283. DOI: 10.1080/01621459.1993.10476408.
+    <span class="small">→ MAD y factor 1.4826.</span>
+  </li>
+  <li>
+    B. Efron. “Bootstrap methods: Another look at the jackknife”.
+    <em>The Annals of Statistics</em>, 7(1) (1979), 1–26.
+    DOI: 10.1214/aos/1176344552.
+    <span class="small">→ Bootstrap sobre el perfil radial.</span>
+  </li>
+</ul>
+
+<strong>Flujo óptico (solo variante láser)</strong>
+<ul class="refs">
+  <li>
+    G. Farnebäck. “Two-frame motion estimation based on polynomial expansion”.
+    En <em>Image Analysis</em> (SCIA 2003), LNCS 2749, Springer, 2003, pp. 363–370.
+    DOI: 10.1007/3-540-45103-X_50.
+    <span class="small">→ <code>detectar_laser.py</code>, no el detector de glitter.</span>
+  </li>
+</ul>
+
+<strong>Software</strong>
+<ul class="refs">
+  <li>
+    G. Bradski. “The OpenCV Library”. <em>Dr. Dobb’s Journal of Software Tools</em>,
+    25(11) (2000), 120–125.
+    <span class="small">→ Video, filtros, morfología, componentes conexas,
+    <code>fitEllipse</code>, <code>matchTemplate</code>, flujo óptico.</span>
+  </li>
+  <li>
+    S. van der Walt, S. C. Colbert y G. Varoquaux. “The NumPy array: A structure for
+    efficient numerical computation”. <em>Computing in Science &amp; Engineering</em>,
+    13(2) (2011), 22–30. DOI: 10.1109/MCSE.2011.37.
+  </li>
+  <li>
+    W. McKinney. “Data structures for statistical computing in Python”.
+    <em>Proceedings of the 9th Python in Science Conference</em> (2010), 56–61.
+    DOI: 10.25080/Majora-92bf1922-00a.
+    <span class="small">→ pandas.</span>
+  </li>
+  <li>
+    J. D. Hunter. “Matplotlib: A 2D graphics environment”.
+    <em>Computing in Science &amp; Engineering</em>, 9(3) (2007), 90–95.
+    DOI: 10.1109/MCSE.2007.55.
+  </li>
+  <li>
+    OpenPIV Team. <em>OpenPIV: Open-source Particle Image Velocimetry toolbox</em>.
+    <a href="https://openpiv.readthedocs.io">https://openpiv.readthedocs.io</a>.
+    <span class="small">→ Solo como antecedente metodológico; no se usa en el código final.</span>
+  </li>
+</ul>
+
+<h3>11.3. Referencias internas del repositorio</h3>
+<ul class="refs">
+  <li><a href="README.md"><code>README.md</code></a>: pipeline, parámetros, formatos y constantes hardcodeadas.</li>
+  <li><a href="METODOLOGIA.html"><code>METODOLOGIA.html</code></a>: ecuaciones, cadena de ajustes y presupuesto de errores.</li>
+  <li><a href="ejemplos/30_2_5/informe.html"><code>ejemplos/30_2_5/informe.html</code></a>: ejemplo de informe generado automáticamente.</li>
+  <li><a href="docs/analisis_formulas.pdf"><code>docs/analisis_formulas.pdf</code></a>: modelos y bibliografía [1]–[2].</li>
+  <li><a href="detectar_glitter.py"><code>detectar_glitter.py</code></a>: detector de partículas + vecino mutuo.</li>
+  <li><a href="analizar_glitter.py"><code>analizar_glitter.py</code></a>: perfil radial, modelos y errores.</li>
+  <li><a href="detectar_laser.py"><code>detectar_laser.py</code></a>: variante láser con Farnebäck.</li>
+  <li><a href="validar_errores.py"><code>validar_errores.py</code></a>: chequeos de consistencia de los resultados.</li>
+</ul>
+
+<h3>11.4. Aclaración sobre qué se usa y qué no</h3>
+<div class="aviso">
+  <p>
+    En el repositorio, <strong>la única bibliografía explícita</strong> es la del PDF
+    <code>docs/analisis_formulas.pdf</code> ([1]–[3]). Las demás son referencias
+    metodológicas estándar que conviene citar <strong>solo si el informe menciona esos
+    métodos o herramientas</strong>.
+  </p>
+  <ul>
+    <li>El código final <strong>no usa Trackpy ni OpenPIV</strong>; si se nombran, es como antecedentes metodológicos.</li>
+    <li>El código final <strong>sí usa</strong> OpenCV, NumPy, pandas, matplotlib, MAD, bootstrap y vecino mutuo.</li>
+    <li>El código final <strong>no usa</strong> asignación Húngara ni seguimiento con identidad.</li>
+    <li>El código final <strong>no usa</strong> Otsu; usa umbral \(k\cdot\)MAD.</li>
+  </ul>
+</div>
+
+<details>
+  <summary>BibTeX de las referencias explícitas y principales</summary>
+<pre><code>@book{acheson1990,
+  author    = {Acheson, D. J.},
+  title     = {Elementary Fluid Dynamics},
+  publisher = {Oxford University Press},
+  year      = {1990},
+  isbn      = {0-19-859679-0}
+}
+
+@incollection{burgers1948,
+  author    = {Burgers, J. M.},
+  title     = {A mathematical model illustrating the theory of turbulence},
+  booktitle = {Advances in Applied Mechanics},
+  publisher = {Elsevier},
+  year      = {1948},
+  isbn      = {978-0-12-374579-8}
+}
+
+@book{drazin2006,
+  author    = {Drazin, P. G. and Riley, N.},
+  title     = {The Navier--Stokes Equations: A Classification of Flows and Exact Solutions},
+  publisher = {Cambridge University Press},
+  year      = {2006},
+  isbn      = {978-0-521-68162-9}
+}
+
+@article{adrian1991,
+  author  = {Adrian, R. J.},
+  title   = {Particle-imaging techniques for experimental fluid mechanics},
+  journal = {Annual Review of Fluid Mechanics},
+  volume  = {23},
+  pages   = {261--304},
+  year    = {1991},
+  doi     = {10.1146/annurev.fl.23.010191.001401}
+}
+
+@article{crocker1996,
+  author  = {Crocker, J. C. and Grier, D. G.},
+  title   = {Methods of digital video microscopy for colloidal studies},
+  journal = {Journal of Colloid and Interface Science},
+  volume  = {179},
+  number  = {1},
+  pages   = {298--310},
+  year    = {1996},
+  doi     = {10.1006/jcis.1996.0217}
+}
+
+@article{rousseeuw1993,
+  author  = {Rousseeuw, P. J. and Croux, C.},
+  title   = {Alternatives to the median absolute deviation},
+  journal = {Journal of the American Statistical Association},
+  volume  = {88},
+  number  = {424},
+  pages   = {1273--1283},
+  year    = {1993},
+  doi     = {10.1080/01621459.1993.10476408}
+}
+
+@article{efron1979,
+  author  = {Efron, B.},
+  title   = {Bootstrap methods: Another look at the jackknife},
+  journal = {The Annals of Statistics},
+  volume  = {7},
+  number  = {1},
+  pages   = {1--26},
+  year    = {1979},
+  doi     = {10.1214/aos/1176344552}
+}</code></pre>
+</details>
+
+<div class="footer">
+  Documento generado como explicación del pipeline de
+  <code>detectar_glitter.py</code> y <code>analizar_glitter.py</code>.
+  Las ecuaciones usan MathJax; si no hay conexión, se muestran como LaTeX.
+</div>
+
+</main>
+</body>
+</html>
